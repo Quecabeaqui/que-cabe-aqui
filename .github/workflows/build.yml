@@ -16,6 +16,8 @@ jobs:
         with:
           node-version: 20
       - run: npm install
+      - name: Run regression checks
+        run: npm run test:regression
       - run: npm run build
       - name: Upload production build
         uses: actions/upload-pages-artifact@v3
