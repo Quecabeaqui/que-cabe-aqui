@@ -29,11 +29,14 @@ if (failures.length) {
   process.exit(1);
 }
 
+// Static product URLs must carry the affiliate tag. The Amazon search URL is intentionally
+// constructed without query parameters first and receives the tag via URLSearchParams below.
 const affiliateLinks = [...source.matchAll(/https:\/\/www\.amazon\.es\/[^'"`]+/g)].map(m => m[0]);
-const withoutTag = affiliateLinks.filter(url => !url.includes('tag=quecabeaqui-21'));
+const staticProductLinks = affiliateLinks.filter(url => !url.endsWith('/s'));
+const withoutTag = staticProductLinks.filter(url => !url.includes('tag=quecabeaqui-21'));
 if (withoutTag.length) {
-  console.error(`Regression check failed: ${withoutTag.length} Amazon links without affiliate tag`);
+  console.error(`Regression check failed: ${withoutTag.length} Amazon product links without affiliate tag`);
   process.exit(1);
 }
 
-console.log(`Regression OK: ${checks.length} checks + ${affiliateLinks.length} Amazon affiliate links validated.`);
+console.log(`Regression OK: ${checks.length} checks + ${staticProductLinks.length} static Amazon product links validated.`);
