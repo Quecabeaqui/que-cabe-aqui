@@ -29,7 +29,13 @@ const checks = [
   ['Awin catalog has second verified 3D product', catalog.includes('awin-43006988876')],
   ['Awin catalog has progressive batch', catalog.includes('awin-44019575221') && catalog.includes('awin-43808680772')],
   ['Awin merchant 24018', catalog.includes('merchantId":24018')],
-  ['Awin catalog rejects incomplete-dimension rows', !catalog.includes('awin-45671538855') && !catalog.includes('awin-44852083365') && !catalog.includes('awin-32936051501')]
+  ['Awin catalog rejects incomplete-dimension rows', !catalog.includes('awin-45671538855') && !catalog.includes('awin-44852083365') && !catalog.includes('awin-32936051501')],
+  ['priority hint buttons include all five searches', ['lavavajillas','lavavajillas 45 cm','lavadora','escritorio','mueble TV'].every(q => source.includes(`data-q=\"${q}\"`))],
+  ['priority matcher is accent-insensitive', source.includes("normalize('NFD').replace(/[\\u0300-\\u036f]/g,'')")],
+  ['query number tokens are removed before text matching', source.includes("replace(/\\d+(?:[.,]\\d+)?/g,' ')")],
+  ['comma-decimal dimensions are parsed as numbers', source.includes("replace(',','.')")],
+  ['45 cm query can constrain width', source.includes("cm&&/(lavavajillas|lavadora|secadora|escritorio|mueble)/.test(s)?+cm[1]:null")],
+  ['all three user dimensions are optional', source.includes("w=n('w')??p.w,d=n('d')??p.d,h=n('h')")]
 ];
 
 const failures = checks.filter(([, ok]) => !ok);
@@ -84,7 +90,10 @@ const boundaryChecks = [
   ['0.1 cm margin rejects exact-width product', !fits(60, 60, 0.1)],
   ['0.1 cm spare room accepts 59.9 cm product', fits(59.9, 60, 0.1)],
   ['oversized product rejected', !fits(60.1, 60, 0)],
-  ['margin larger than available rejects product', !fits(1, 60, 60.1)]
+  ['margin larger than available rejects product', !fits(1, 60, 60.1)],
+  ['negative margin is clamped to zero', fits(60, 60, -5)],
+  ['independent axis filtering rejects overflow', fits(60, 60, 0) && !fits(60.1, 60, 0)],
+  ['independent axis filtering accepts spare room', fits(59.9, 60, 0) && fits(59.9, 60, 0) && fits(59.9, 60, 0)]
 ];
 const failedBoundaries = boundaryChecks.filter(([, ok]) => !ok);
 if (failedBoundaries.length) {
