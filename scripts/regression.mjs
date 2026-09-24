@@ -17,7 +17,7 @@ const checks = [
   ['width fit check', source.includes('x.width<=uw')],
   ['depth fit check', source.includes('x.depth<=ud')],
   ['height fit check', source.includes('x.height<=uh')],
-  ['45 cm query parser', source.includes("cm').test(s)?+cm[1]:null")],
+  ['45 cm query parser', source.includes("cm.match(/(\\d+(?:\\.\\d+)?)\\s*cm/)")],
   ['45 cm dimension queries target width', source.includes("/(lavavajillas|lavadora|secadora|escritorio|mueble)/.test(s)?+cm[1]:null")],
   ['Hisense dimensions', source.includes("Electrodomésticos',59.8,60,84.5")],
   ['Klicelor dimensions', source.includes("Escritorios',160,60,116")],
@@ -68,7 +68,6 @@ if (invalidDimensions.length) {
   process.exit(1);
 }
 
-// Boundary checks for the exact fit rule used by the app: product <= available - margin.
 const fits = (product, available, margin) => product <= available - Math.max(0, margin);
 const boundaryChecks = [
   ['exact fit with zero margin', fits(60, 60, 0)],
