@@ -27,6 +27,7 @@ const checks = [
   ['Awin catalog merged', source.includes('products.push(...awinMapped)')],
   ['Awin catalog has verified 3D product', catalog.includes('awin-45568645435')],
   ['Awin catalog has second verified 3D product', catalog.includes('awin-43006988876')],
+  ['Awin catalog has progressive batch', catalog.includes('awin-44019575221') && catalog.includes('awin-43808680772')],
   ['Awin merchant 24018', catalog.includes('merchantId":24018')],
   ['Awin catalog rejects incomplete-dimension rows', !catalog.includes('awin-45671538855') && !catalog.includes('awin-44852083365') && !catalog.includes('awin-32936051501')]
 ];
@@ -60,6 +61,15 @@ if (invalidAwinLinks.length) {
 const catalogRows = [...catalog.matchAll(/\{"id":"([^"]+)"[^\n]*?"width":([0-9.]+),"depth":([0-9.]+),"height":([0-9.]+),"merchantId":(\d+)/g)];
 if (!catalogRows.length) {
   console.error('Regression check failed: no structured Awin dimension rows found');
+  process.exit(1);
+}
+if (catalogRows.length < 30) {
+  console.error(`Regression check failed: progressive Awin batch unexpectedly small (${catalogRows.length} rows)`);
+  process.exit(1);
+}
+const ids = catalogRows.map(([, id]) => id);
+if (new Set(ids).size !== ids.length) {
+  console.error('Regression check failed: duplicate Awin product ids');
   process.exit(1);
 }
 const invalidDimensions = catalogRows.filter(([, , w, d, h]) => ![w, d, h].every(v => Number.isFinite(Number(v)) && Number(v) > 0));
