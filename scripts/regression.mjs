@@ -25,10 +25,10 @@ const checks = [
   ['image fallback handler', source.includes('onerror=')],
   ['Awin catalog imported', source.includes("import { awinProducts } from './awinCatalog'")],
   ['Awin catalog merged', source.includes('products.push(...awinMapped)')],
-  ['Awin catalog has validated product', catalog.includes('awin-45568645435')],
-  ['Awin catalog has La Redoute product', catalog.includes('awin-45671538855')],
-  ['Awin merchant 24018', catalog.includes('merchantId:24018')],
-  ['Awin merchant 10497', catalog.includes('merchantId:10497')]
+  ['Awin catalog has verified 3D product', catalog.includes('awin-45568645435')],
+  ['Awin catalog has second verified 3D product', catalog.includes('awin-43006988876')],
+  ['Awin merchant 24018', catalog.includes('merchantId":24018')],
+  ['Awin catalog rejects incomplete-dimension rows', !catalog.includes('awin-45671538855') && !catalog.includes('awin-44852083365') && !catalog.includes('awin-32936051501')]
 ];
 
 const failures = checks.filter(([, ok]) => !ok);
