@@ -16,7 +16,7 @@ const products:Product[]=[
 ['klicelor','Klicelor - Escritorio elevable eléctrico 160 x 60 cm','https://www.amazon.es/dp/B0FJYM52Y2?tag=quecabeaqui-21','https://m.media-amazon.com/images/P/B0FJYM52Y2.01.LZZZZZZZ.jpg','Escritorios',160,60,116,'https://images.weserv.nl/?url=m.media-amazon.com%2Fimages%2FP%2FB0FJYM52Y2.01.LZZZZZZZ.jpg'],
 ['homall','Homall - Escritorio eléctrico regulable 160 x 70 cm','https://www.amazon.es/Homall-escritorio-el%C3%A9ctrico-regulable-anticolisi%C3%B3n/dp/B0CCNZRC1H?tag=quecabeaqui-21','https://m.media-amazon.com/images/I/61b4CIG-UWL.jpg','Escritorios',160,70,118]
 ].map(x=>({id:x[0] as string,title:x[1] as string,url:x[2] as string,image:x[3] as string,category:x[4] as string,width:x[5] as number,depth:x[6] as number,height:x[7] as number,fallback:x[8] as string|undefined}));
-const awinMapped:Product[]=awinProducts.map((p:any)=>({id:p.id,title:p.title,url:`https://www.awin1.com/pclick.php?p=${p.id.replace('awin-','')}&a=3098668&m=${p.merchantId}`,image:'https://placehold.co/600x400?text=Qué+Cabe+Aquí',category:p.category,width:p.width,depth:p.depth,height:p.height}));
+const awinMapped:Product[]=awinProducts.map(p=>({id:p.id,title:p.title,url:p.url,image:p.image||'https://placehold.co/600x400?text=Qué+Cabe+Aquí',category:p.category,width:p.width,depth:p.depth,height:p.height}));
 products.push(...awinMapped);
 const cats=['Electrodomésticos','Muebles','Cocina','Baño','Almacenaje','Escritorios','Dormitorio','Salón','Sofás','Sillas','Mesas','Camas y descanso','Armarios y almacenamiento','Mobiliario de exterior','Estanterías','Bancos y taburetes','Muebles de baño','Otros muebles','Muebles auxiliares'];
 const app=document.querySelector('#app')!;
