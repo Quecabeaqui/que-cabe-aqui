@@ -18,6 +18,7 @@ const checks = [
   ['depth fit check', source.includes('x.depth<=ud')],
   ['height fit check', source.includes('x.height<=uh')],
   ['45 cm query parser', source.includes("cm').test(s)?+cm[1]:null")],
+  ['45 cm dimension queries target width', source.includes("/(lavavajillas|lavadora|secadora|escritorio|mueble)/.test(s)?+cm[1]:null")],
   ['Hisense dimensions', source.includes("Electrodomésticos',59.8,60,84.5")],
   ['Klicelor dimensions', source.includes("Escritorios',160,60,116")],
   ['Klicelor fallback', source.includes('B0FJYM52Y2.01.LZZZZZZZ')],
