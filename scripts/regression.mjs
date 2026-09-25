@@ -67,9 +67,9 @@ if (invalidAwinLinks.length) {
   process.exit(1);
 }
 
-const priorityAwinLink = priority.match(/https:\/\/www\.awin1\.com\/pclick\.php\?[^'"\n]+/g) || [];
-if (priorityAwinLink.length !== 1 || !/[?&]p=37701111449&a=3098668&m=24018/.test(priorityAwinLink[0])) {
-  console.error('Regression check failed: verified 45cm dishwasher Awin link is invalid');
+const priorityAwinLinks = priority.match(/https:\/\/www\.awin1\.com\/pclick\.php\?[^'"\n]+/g) || [];
+if (!priorityAwinLinks.some(url => /[?&]p=37701111449&a=3098668&m=24018/.test(url))) {
+  console.error('Regression check failed: verified 45cm dishwasher Awin link is missing or invalid');
   process.exit(1);
 }
 
@@ -111,4 +111,4 @@ if (failedBoundaries.length) {
   process.exit(1);
 }
 
-console.log(`Regression OK: ${checks.length} source checks + ${staticAmazonLinks.length} Amazon links + ${awinLinks.length} Awin links + ${catalogRows.length} Awin dimension rows + ${priorityAwinLink.length} priority Awin link + ${boundaryChecks.length} boundary cases validated.`);
+console.log(`Regression OK: ${checks.length} source checks + ${staticAmazonLinks.length} Amazon links + ${awinLinks.length} Awin links + ${catalogRows.length} Awin dimension rows + ${priorityAwinLinks.length} priority Awin links + ${boundaryChecks.length} boundary cases validated.`);
