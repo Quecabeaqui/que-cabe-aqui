@@ -12,6 +12,7 @@ const checks = [
   ['mueble TV product', source.includes('VASAGLE LTV027N01 - Mueble TV 140 cm')],
   ['verified Awin 45cm dishwasher priority row', priority.includes("awin-37701111449") && priority.includes('45') && priority.includes('44') && priority.includes('46')],
   ['priority catalog merged', source.includes("import { priorityProducts } from './priorityCatalog'") && source.includes('products.push(...priorityProducts)')],
+  ['catalog merge deduplicates by product id', source.includes('new Map(products.map(p=>[p.id,p])).values()')],
   ['affiliate tag constant', source.includes("const TAG='quecabeaqui-21'")],
   ['amazon fallback carries tag', source.includes("u.searchParams.set('tag',TAG)")],
   ['width safety margin', source.includes('uw=w===null?null:w-m')],
@@ -85,6 +86,16 @@ if (catalogRows.length < 30) {
 const ids = catalogRows.map(([, id]) => id);
 if (new Set(ids).size !== ids.length) {
   console.error('Regression check failed: duplicate Awin product ids');
+  process.exit(1);
+}
+const priorityIds = [...priority.matchAll(/id:\s*'([^']+)'/g)].map(([, id]) => id);
+if (new Set(priorityIds).size !== priorityIds.length) {
+  console.error('Regression check failed: duplicate priority product ids');
+  process.exit(1);
+}
+const overlapIds = priorityIds.filter(id => ids.includes(id));
+if (overlapIds.length) {
+  console.error(`Regression check failed: ${overlapIds.length} priority products also exist in the Awin catalog`);
   process.exit(1);
 }
 const invalidDimensions = catalogRows.filter(([, , w, d, h]) => ![w, d, h].every(v => Number.isFinite(Number(v)) && Number(v) > 0));
