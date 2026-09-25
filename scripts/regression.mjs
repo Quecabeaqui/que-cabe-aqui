@@ -2,6 +2,7 @@ import fs from 'node:fs';
 
 const source = fs.readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
 const catalog = fs.readFileSync(new URL('../src/awinCatalog.ts', import.meta.url), 'utf8');
+const priority = fs.readFileSync(new URL('../src/priorityCatalog.ts', import.meta.url), 'utf8');
 
 const checks = [
   ['lavavajillas product', source.includes('Hisense HS622E10X - Lavavajillas 60 cm')],
@@ -9,6 +10,8 @@ const checks = [
   ['lavadora product', source.includes('Bosch WUU28T63ES - Lavadora Serie 6')],
   ['escritorio product', source.includes('Devoko - Escritorio eléctrico 120 x 60 cm')],
   ['mueble TV product', source.includes('VASAGLE LTV027N01 - Mueble TV 140 cm')],
+  ['verified Awin 45cm dishwasher priority row', priority.includes("awin-37701111449") && priority.includes('45') && priority.includes('44') && priority.includes('46')],
+  ['priority catalog merged', source.includes("import { priorityProducts } from './priorityCatalog'") && source.includes('products.push(...priorityProducts)')],
   ['affiliate tag constant', source.includes("const TAG='quecabeaqui-21'")],
   ['amazon fallback carries tag', source.includes("u.searchParams.set('tag',TAG)")],
   ['width safety margin', source.includes('uw=w===null?null:w-m')],
@@ -64,6 +67,12 @@ if (invalidAwinLinks.length) {
   process.exit(1);
 }
 
+const priorityAwinLink = priority.match(/https:\/\/www\.awin1\.com\/pclick\.php\?[^'"\n]+/g) || [];
+if (priorityAwinLink.length !== 1 || !/[?&]p=37701111449&a=3098668&m=24018/.test(priorityAwinLink[0])) {
+  console.error('Regression check failed: verified 45cm dishwasher Awin link is invalid');
+  process.exit(1);
+}
+
 const catalogRows = [...catalog.matchAll(/\{"id":"([^"]+)"[^\n]*?"width":([0-9.]+),"depth":([0-9.]+),"height":([0-9.]+),"merchantId":(\d+)/g)];
 if (!catalogRows.length) {
   console.error('Regression check failed: no structured Awin dimension rows found');
@@ -102,4 +111,4 @@ if (failedBoundaries.length) {
   process.exit(1);
 }
 
-console.log(`Regression OK: ${checks.length} source checks + ${staticAmazonLinks.length} Amazon links + ${awinLinks.length} Awin links + ${catalogRows.length} Awin dimension rows + ${boundaryChecks.length} boundary cases validated.`);
+console.log(`Regression OK: ${checks.length} source checks + ${staticAmazonLinks.length} Amazon links + ${awinLinks.length} Awin links + ${catalogRows.length} Awin dimension rows + ${priorityAwinLink.length} priority Awin link + ${boundaryChecks.length} boundary cases validated.`);
