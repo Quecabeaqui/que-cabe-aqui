@@ -21,7 +21,7 @@ const checks = [
   ['width fit check', source.includes('x.width<=uw')],
   ['depth fit check', source.includes('x.depth<=ud')],
   ['height fit check', source.includes('x.height<=uh')],
-  ['decimal comma parser normalization', source.includes("const s=norm(q).replace(/,/g,'.')")],
+  ['decimal comma parser normalization', source.includes("replace(/,/g,'.')")],
   ['dimension queries target width', source.includes('/(lavavajillas|lavadora|secadora|escritorio|mueble|tv)/.test(s)?+cm[1]:null')],
   ['query aliases normalize appliance and TV terms', source.includes("replace(/\\b(lavaplatos|lavavajilla)\\b/g,'lavavajillas').replace(/\\b(televisor|television|tele)\\b/g,'tv')")],
   ['Hisense dimensions', source.includes("Electrodomésticos',59.8,60,84.5")],
