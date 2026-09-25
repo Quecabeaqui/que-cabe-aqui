@@ -30,7 +30,7 @@ const checks = [
   ['Awin catalog has progressive batch', catalog.includes('awin-44019575221') && catalog.includes('awin-43808680772')],
   ['Awin merchant 24018', catalog.includes('merchantId":24018')],
   ['Awin catalog rejects incomplete-dimension rows', !catalog.includes('awin-45671538855') && !catalog.includes('awin-44852083365') && !catalog.includes('awin-32936051501')],
-  ['priority hint buttons include all five searches', ['lavavajillas','lavavajillas 45 cm','lavadora','escritorio','mueble TV'].every(q => source.includes(`data-q="${q}"`))],
+  ['priority quick-search list contains all five searches', ['lavavajillas','lavavajillas 45 cm','lavadora','escritorio','mueble TV'].every(q => source.includes(`'${q}'`))],
   ['priority matcher is accent-insensitive', source.includes("normalize('NFD').replace(/[\\u0300-\\u036f]/g,'')")],
   ['query number tokens are removed before text matching', source.includes("replace(/\\d+(?:[.,]\\d+)?/g,' ')")],
   ['comma-decimal dimensions are parsed as numbers', source.includes("replace(',','.')")],
