@@ -93,7 +93,7 @@ const boundaryChecks = [
   ['margin larger than available rejects product', !fits(1, 60, 60.1)],
   ['negative margin is clamped to zero', fits(60, 60, -5)],
   ['independent axis filtering rejects overflow', fits(60, 60, 0) && !fits(60.1, 60, 0)],
-  ['independent axis filtering accepts spare room', fits(59.9, 60, 0) && fits(59.9, 60, 0) && fits(59.9, 60, 0)]
+  ['independent axis filtering accepts spare room on all axes', fits(59.9, 60, 0) && fits(59.9, 60, 0) && fits(59.9, 60, 0)]
 ];
 const failedBoundaries = boundaryChecks.filter(([, ok]) => !ok);
 if (failedBoundaries.length) {
