@@ -23,6 +23,7 @@ const checks = [
   ['height fit check', source.includes('x.height<=uh')],
   ['decimal comma parser normalization', source.includes("replace(/,/g,'.')")],
   ['dimension queries target width', source.includes('/(lavavajillas|lavadora|secadora|escritorio|mueble|tv)/.test(s)?+cm[1]:null')],
+  ['bare dimension queries target width', source.includes('bare&&/(lavavajillas|lavadora|secadora|escritorio|mueble|tv)/.test(s)?+bare[1]:null')],
   ['query aliases normalize appliance and TV terms', source.includes("replace(/\\b(lavaplatos|lavavajilla)\\b/g,'lavavajillas').replace(/\\b(televisor|television|tele)\\b/g,'tv')")],
   ['Hisense dimensions', source.includes("Electrodomésticos',59.8,60,84.5")],
   ['Klicelor dimensions', source.includes("Escritorios',160,60,116")],
@@ -40,6 +41,7 @@ const checks = [
   ['query number tokens are removed before text matching', source.includes("replace(/\\d+(?:[.,]\\d+)?/g,' ')")],
   ['comma-decimal dimensions are parsed as numbers', source.includes("replace(',','.')")],
   ['45 cm query can constrain width', source.includes("cm&&/(lavavajillas|lavadora|secadora|escritorio|mueble|tv)/.test(s)?+cm[1]:null")],
+  ['bare 45 query can constrain width', source.includes("bare&&/(lavavajillas|lavadora|secadora|escritorio|mueble|tv)/.test(s)?+bare[1]:null")],
   ['all three user dimensions are optional', source.includes("w=n('w')??p.w,d=n('d')??p.d,h=n('h')")]
 ];
 
